@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Snapchat</string>
+    <string name="camera_button">&#xf030; Take Picture</string>
+    <string name="action_settings">Action settings</string>
+</resources>
