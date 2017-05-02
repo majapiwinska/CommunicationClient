@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
+import com.example.snapchat.api.dto.UserDto;
 import com.example.snapchat.database.DatabaseFacade;
 import com.example.snapchat.database.model.User;
 import com.example.Preferences;
@@ -74,10 +75,11 @@ public class WelcomeActivity extends AppCompatActivity {
         } else if (password.isEmpty()) {
             Toast.makeText(this, "Missing password", Toast.LENGTH_SHORT).show();
         } else {
-            Api.getInstance().login(email, password)
-                    .enqueue(new Callback<User>() {
+            UserDto userDto = new UserDto("", "", "", email, password);
+            Api.getInstance().login(userDto)
+                    .enqueue(new Callback<UserDto>() {
                         @Override
-                        public void onResponse(Call<User> call, Response<User> response) {
+                        public void onResponse(Call<UserDto> call, Response<UserDto> response) {
                             try {
                                 if (response.code() != 200) {
                                     Toast.makeText(thisInstance, "Niepoprawne dane logowania!", Toast.LENGTH_SHORT).show();
@@ -97,7 +99,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<User> call, Throwable t) {
+                        public void onFailure(Call<UserDto> call, Throwable t) {
                             Log.d(WelcomeActivity.class.getSimpleName(), "Error in login(): " + t.getLocalizedMessage());
                         }
                     });

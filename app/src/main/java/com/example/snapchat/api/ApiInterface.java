@@ -20,9 +20,8 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     @POST("login")
-    Call<User> login(
-            @Field("email") String email,
-            @Field("password") String password
+    Call<UserDto> login(
+            @Body UserDto userDto
     );
 
     @POST("signup")
