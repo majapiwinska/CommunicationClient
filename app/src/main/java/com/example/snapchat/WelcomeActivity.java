@@ -83,7 +83,6 @@ public class WelcomeActivity extends AppCompatActivity {
                                     Toast.makeText(thisInstance, "Niepoprawne dane logowania!", Toast.LENGTH_SHORT).show();
                                     this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
                                 } else {
-
                                     preferences.setEmail(email);
                                     preferences.setPassword(password);
                                     User user = new User();

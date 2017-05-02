@@ -1,46 +1,22 @@
-package com.example.snapchat.database.model;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+package com.example.snapchat.api.dto;
 
 /**
- * Created by maja on 31.03.17.
+ * Created by maja on 01.05.17.
  */
 
-@DatabaseTable(tableName = "users")
-public class User implements Serializable {
+public class UserDto {
 
-    public static final String COLUMN_USER_ID = "user_id";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_SURNAME = "surname";
-    public static final String COLUMN_NICK = "nick";
-    public static final String COLUMN_EMAIL = "email";
-    public static final String COLUMN_PASSWORD = "password";
-
-    @DatabaseField(columnName = COLUMN_USER_ID, unique = true)
     private Long id;
-
-    @DatabaseField(columnName = COLUMN_NAME)
     private String name;
-
-    @DatabaseField(columnName = COLUMN_SURNAME)
     private String surname;
-    @DatabaseField(columnName = COLUMN_NICK)
     private String nick;
-
-    @DatabaseField(columnName = COLUMN_EMAIL)
     private String email;
-
-    @DatabaseField(columnName = COLUMN_PASSWORD)
     private String password;
 
-    public User() {};
+    public UserDto() {
+    }
 
-    public User(String name, String surname, String nick, String email, String password) {
+    public UserDto(String name, String surname, String nick, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.nick = nick;
@@ -95,5 +71,4 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

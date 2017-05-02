@@ -30,9 +30,9 @@ public class Snap implements Serializable {
     @DatabaseField(columnName = COLUMN_SENDER_ID)
     private Long senderId;
 
-    @DatabaseField(columnName = COLUMN_PHOTO)
+  /*  @DatabaseField(columnName = COLUMN_PHOTO)
     private Blob photo;
-
+*/
     @DatabaseField(columnName = COLUMN_OPENED)
     private boolean opened;
 
@@ -60,14 +60,14 @@ public class Snap implements Serializable {
         this.senderId = senderId;
     }
 
-    public Blob getPhoto() {
+  /*  public Blob getPhoto() {
         return photo;
     }
 
     public void setPhoto(Blob photo) {
         this.photo = photo;
     }
-
+*/
     public boolean isOpened() {
         return opened;
     }

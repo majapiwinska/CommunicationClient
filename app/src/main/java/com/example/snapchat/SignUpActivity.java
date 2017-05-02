@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
+import com.example.snapchat.api.dto.UserDto;
 import com.example.snapchat.database.DatabaseFacade;
 import com.example.snapchat.database.model.User;
 
@@ -77,19 +78,21 @@ public class SignUpActivity extends AppCompatActivity {
        } else if (surname.isEmpty()) {
            Toast.makeText(this, "Missing surname", Toast.LENGTH_SHORT).show();
        } else {
-           Api.getInstance().signUp(name, surname, nick, email, password)
-                   .enqueue(new Callback<User>() {
+           UserDto dto = new UserDto(name, surname, nick, email,password);
+           Api.getInstance().signUp(dto)
+                   .enqueue(new Callback<UserDto>() {
                        @Override
-                       public void onResponse(Call<User> call, Response<User> response) {
+                       public void onResponse(Call<UserDto> call, Response<UserDto> response) {
+                           Toast.makeText(SignUpActivity.this, "OK on response!", Toast.LENGTH_SHORT).show();
                            try {
                                if (response.code() != 200) {
                                    Toast.makeText(thisInstance, "Invalid registration data!", Toast.LENGTH_SHORT).show();
                                    this.onFailure(call, new Throwable("Invalid registration data"));
                                } else {
-
                                    preferences.setEmail(email);
                                    preferences.setPassword(password);
                                    User user = new User();
+                                   user.setId(response.body().getId());
                                    user.setName(name);
                                    user.setSurname(surname);
                                    user.setNick(nick);
@@ -101,11 +104,13 @@ public class SignUpActivity extends AppCompatActivity {
                            } catch (Exception e) {
                                e.printStackTrace();
                            }
+
                        }
 
                        @Override
-                       public void onFailure(Call<User> call, Throwable t) {
-                           Log.d(WelcomeActivity.class.getSimpleName(), "Registration in login(): " + t.getLocalizedMessage());
+                       public void onFailure(Call<UserDto> call, Throwable t) {
+                           Toast.makeText(SignUpActivity.this, "on failure " + call.request().url().toString() + t.toString(), Toast.LENGTH_SHORT).show();
+                            Log.d(SignUpActivity.class.getSimpleName(), "Registration in login(): " + t.getLocalizedMessage());
                        }
                    });
 

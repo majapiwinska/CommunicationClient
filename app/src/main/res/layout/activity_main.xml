@@ -9,12 +9,12 @@
     tools:context="com.example.maja.firstapp.MainActivity">
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/camera_button"
         android:id="@+id/btnCamera"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
         android:background="@drawable/button"
         android:textColor="#ffd3ffe5"
         android:textStyle="bold" />
@@ -27,4 +27,26 @@
         android:layout_alignParentEnd="true">
 
     </ImageView>
+
+    <Button
+        android:text="@string/send_snap_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/btnSendSnap"
+        android:background="@drawable/button"
+        android:textColor="#ffd3ffe5"
+        android:textStyle="bold"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_snap_button"
+        android:id="@+id/btnEditSnap"
+        android:background="@drawable/button"
+        android:textColor="#ffd3ffe5"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
