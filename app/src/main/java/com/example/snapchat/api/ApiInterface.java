@@ -1,17 +1,11 @@
 package com.example.snapchat.api;
 
-import android.app.DownloadManager;
-
-import com.example.snapchat.api.dto.SnapDto;
-import com.example.snapchat.api.dto.UserDto;
-import com.example.snapchat.database.model.User;
+import com.example.snapchat.dto.SnapDto;
+import com.example.snapchat.dto.UserDto;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 /**
  * Created by maja on 28.04.17.

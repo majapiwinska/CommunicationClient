@@ -1,4 +1,4 @@
-package com.example.snapchat.api.dto;
+package com.example.snapchat.dto;
 
 /**
  * Created by maja on 02.05.17.

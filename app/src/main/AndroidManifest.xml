@@ -18,6 +18,8 @@
         </activity>
         <activity android:name="com.example.snapchat.SignUpActivity"/>
         <activity android:name="com.example.snapchat.MainActivity"/>
+        <activity android:name="com.example.snapchat.FriendsActivity"/>
+        <activity android:name="com.example.snapchat.ChatActivity"/>
     </application>
 
 </manifest>

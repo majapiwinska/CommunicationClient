@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
-import com.example.snapchat.api.dto.UserDto;
+import com.example.snapchat.dto.UserDto;
 import com.example.snapchat.database.DatabaseFacade;
 import com.example.snapchat.database.model.User;
 import com.example.Preferences;

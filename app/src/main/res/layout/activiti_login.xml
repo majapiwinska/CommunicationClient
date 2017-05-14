@@ -77,7 +77,7 @@ Sign up!"
     <Button
         android:layout_marginTop="5dp"
         android:id="@+id/sign_up_login_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign up"
         android:layout_gravity="center"
