@@ -43,8 +43,7 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY){
 
-            if(e1.getX() > e2.getX()){
-
+         if(e1.getX() > e2.getX()){
                 Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 startActivity(intent);
             }
