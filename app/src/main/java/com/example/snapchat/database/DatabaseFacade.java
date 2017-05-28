@@ -37,12 +37,6 @@ public class DatabaseFacade {
         }
     }
 
-    public void addFriend(Long id, String nick) throws java.sql.SQLException{
-        Dao<Friend, Long> friendDao = databaseHelper.getDao(Friend.class);
-
-
-    }
-
     public void createSnap(Snap snap, Long id) throws java.sql.SQLException {
         Dao<Snap, Long> snapDao = databaseHelper.getDao(Snap.class);
         Dao<User, Long> userDao = databaseHelper.getDao(User.class);
