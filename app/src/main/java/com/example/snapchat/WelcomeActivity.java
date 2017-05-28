@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
-import com.example.snapchat.storeage.model.User;
+import com.example.snapchat.storeage.model.LoggedUser;
 import com.example.snapchat.storeage.dao.UserDAO;
 import com.example.snapchat.dto.UserDto;
 
@@ -86,12 +86,11 @@ public class WelcomeActivity extends AppCompatActivity {
                                     this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
                                 } else {
                                     preferences.setEmail(email);
-//                                    preferences.setPassword(password);
                                     UserDto body = response.body();
-                                    User logged = new User(body.getId(), body.getEmail());
+                                    LoggedUser logged = new LoggedUser(body.getId(), body.getEmail());
                                     getUserDAO().saveUser(logged);
                                     String x = getUserDAO().getUser().getEmail();
-                                    Toast.makeText(thisInstance, "User z pamieci " + x, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(thisInstance, "LoggedUser z pamieci " + x, Toast.LENGTH_LONG).show();
                                     startMainActivity();
                                 }
                             } catch (Exception e) {

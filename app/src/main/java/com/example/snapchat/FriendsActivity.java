@@ -17,11 +17,12 @@ import android.widget.Toast;
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
-import com.example.snapchat.database.DatabaseHelper;
-import com.example.snapchat.database.model.Friend;
-import com.example.snapchat.database.model.User;
+import com.example.snapchat.api.ApiInterface;
 import com.example.snapchat.dto.FriendDto;
 import com.example.snapchat.dto.UserDto;
+import com.example.snapchat.storeage.model.Friend;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +42,7 @@ public class FriendsActivity extends AppCompatActivity {
     private Button btnAddFriend;
     private EditText friendEmail;
     private Button btnDialog;
+    private List<Friend> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class FriendsActivity extends AppCompatActivity {
                                 Log.d(FriendsActivity.class.getSimpleName(), "Error in adding a friend(): " + t.getLocalizedMessage());
                             }
                         });
+//                        Api.getInstance().getFriends()
                         dialog.dismiss();
                     }
 
@@ -99,15 +102,13 @@ public class FriendsActivity extends AppCompatActivity {
         }
         );
 
-    };
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
         this.gestureObject.onTouchEvent(event);
         return super.onTouchEvent(event);
-    };
-
-
+    }
 
     class LearnGesture extends GestureDetector.SimpleOnGestureListener{
 
@@ -121,7 +122,7 @@ public class FriendsActivity extends AppCompatActivity {
             }
             return true;
 
-        };
+        }
 
     }
 

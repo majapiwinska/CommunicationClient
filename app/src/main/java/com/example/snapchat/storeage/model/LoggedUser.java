@@ -1,11 +1,11 @@
 package com.example.snapchat.storeage.model;
 
-public class User {
+public class LoggedUser {
 
     private final long id;
     private final String email;
 
-    public User(long id, String email) {
+    public LoggedUser(long id, String email) {
         this.id = id;
         this.email = email;
     }

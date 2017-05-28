@@ -6,8 +6,7 @@ package com.example.snapchat.dto;
 
 public class FriendDto {
 
-   private String userEmail;
-
+    private String userEmail;
     private String friendEmail;
 
     public FriendDto() {

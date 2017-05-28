@@ -13,8 +13,6 @@ import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
 import com.example.snapchat.dto.UserDto;
-import com.example.snapchat.database.DatabaseFacade;
-import com.example.snapchat.database.model.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,12 +29,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     private Preferences preferences;
     private SignUpActivity thisInstance;
-    private DatabaseFacade databaseFacade = null;
 
     public SignUpActivity() {
 
     }
-
 
 
     @Override
@@ -61,74 +57,57 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-   public void signUp(){
-       final String name = nameEditText.getText().toString();
-       final String surname = surnameEditText.getText().toString();
-       final String nick = nickEditText.getText().toString();
-       final String email = emailEditText.getText().toString();
-       final String password = passwordEditText.getText().toString();
-       if (email.isEmpty()) {
-           Toast.makeText(this, "Missing email", Toast.LENGTH_SHORT).show();
-       } else if (password.isEmpty()) {
-           Toast.makeText(this, "Missing password", Toast.LENGTH_SHORT).show();
-       } else if (nick.isEmpty()) {
-           Toast.makeText(this, "Missing nick", Toast.LENGTH_SHORT).show();
-       }else if (name.isEmpty()) {
-           Toast.makeText(this, "Missing name", Toast.LENGTH_SHORT).show();
-       } else if (surname.isEmpty()) {
-           Toast.makeText(this, "Missing surname", Toast.LENGTH_SHORT).show();
-       } else {
-           UserDto dto = new UserDto(name, surname, nick, email,password);
-           Api.getInstance().signUp(dto)
-                   .enqueue(new Callback<UserDto>() {
-                       @Override
-                       public void onResponse(Call<UserDto> call, Response<UserDto> response) {
-                           Toast.makeText(SignUpActivity.this, "OK on response!", Toast.LENGTH_SHORT).show();
-                           try {
-                               if (response.code() != 200) {
-                                   Toast.makeText(thisInstance, "Invalid registration data!", Toast.LENGTH_SHORT).show();
-                                   this.onFailure(call, new Throwable("Invalid registration data"));
-                               } else {
-                                   preferences.setEmail(email);
-                                   preferences.setPassword(password);
-                                   User user = new User();
-                                   user.setId(response.body().getId());
-                                   user.setName(name);
-                                   user.setSurname(surname);
-                                   user.setNick(nick);
-                                   user.setEmail(email);
-                                   user.setPassword(password);
-                                   getHelper().createOrUpdateUser(user);
-                                   startMainActivity(user);
-                               }
-                           } catch (Exception e) {
-                               e.printStackTrace();
-                           }
+    public void signUp() {
+        final String name = nameEditText.getText().toString();
+        final String surname = surnameEditText.getText().toString();
+        final String nick = nickEditText.getText().toString();
+        final String email = emailEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Missing email", Toast.LENGTH_SHORT).show();
+        } else if (password.isEmpty()) {
+            Toast.makeText(this, "Missing password", Toast.LENGTH_SHORT).show();
+        } else if (nick.isEmpty()) {
+            Toast.makeText(this, "Missing nick", Toast.LENGTH_SHORT).show();
+        } else if (name.isEmpty()) {
+            Toast.makeText(this, "Missing name", Toast.LENGTH_SHORT).show();
+        } else if (surname.isEmpty()) {
+            Toast.makeText(this, "Missing surname", Toast.LENGTH_SHORT).show();
+        } else {
+            UserDto dto = new UserDto(name, surname, nick, email, password);
+            Api.getInstance().signUp(dto)
+                    .enqueue(new Callback<UserDto>() {
+                        @Override
+                        public void onResponse(Call<UserDto> call, Response<UserDto> response) {
+                            Toast.makeText(SignUpActivity.this, "OK on response!", Toast.LENGTH_SHORT).show();
+                            try {
+                                if (response.code() != 200) {
+                                    Toast.makeText(thisInstance, "Invalid registration data!", Toast.LENGTH_SHORT).show();
+                                    this.onFailure(call, new Throwable("Invalid registration data"));
+                                } else {
+                                    preferences.setEmail(email);
+                                    preferences.setPassword(password);
+                                    startMainActivity();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                       }
+                        }
 
-                       @Override
-                       public void onFailure(Call<UserDto> call, Throwable t) {
-                           Toast.makeText(SignUpActivity.this, "on failure " + call.request().url().toString() + t.toString(), Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onFailure(Call<UserDto> call, Throwable t) {
+                            Toast.makeText(SignUpActivity.this, "on failure " + call.request().url().toString() + t.toString(), Toast.LENGTH_SHORT).show();
                             Log.d(SignUpActivity.class.getSimpleName(), "Registration in login(): " + t.getLocalizedMessage());
-                       }
-                   });
+                        }
+                    });
 
         }
-   }
+    }
 
-    private void startMainActivity(User user) {
+    private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("user", user);
         startActivity(intent);
     }
-
-    public DatabaseFacade getHelper() {
-        if (databaseFacade == null) {
-            databaseFacade=new DatabaseFacade(this);
-        }
-        return databaseFacade;
-    }
-
 }

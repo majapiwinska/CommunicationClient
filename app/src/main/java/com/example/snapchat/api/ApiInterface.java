@@ -1,6 +1,5 @@
 package com.example.snapchat.api;
 
-import com.example.snapchat.database.model.Friend;
 import com.example.snapchat.dto.FriendDto;
 import com.example.snapchat.dto.SnapDto;
 import com.example.snapchat.dto.UserDto;
@@ -9,7 +8,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -32,9 +30,10 @@ public interface ApiInterface {
 
     @POST("sendsnap")
     Call<Void> sendSnap(
-        @Body SnapDto snapDto
+            @Body SnapDto snapDto
     );
 
+    // TODO zapytanie get musi iść na ścieżkę z parametrem usera
     @GET("getsnaps")
     Call<List<SnapDto>> getSnaps(
             @Body List<SnapDto> snaps
@@ -43,11 +42,12 @@ public interface ApiInterface {
     @PUT("addfriend")
     Call<UserDto> addFriend(
             @Body FriendDto friendDto
-            );
+    );
 
-    @GET("getFriends")
-    Call<List<FriendDto>> getFriends(
-        @Body List<FriendDto> friends
+    // TODO zapytanie get musi iść na ścieżkę z parametrem usera
+    @GET("getfriends")
+    Call<List<UserDto>> getFriends(
+            @Body List<UserDto> friends
     );
 
 }
