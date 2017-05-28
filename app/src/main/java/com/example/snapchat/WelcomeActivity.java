@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
+import com.example.snapchat.dao.model.User;
+import com.example.snapchat.dao.storeage.UserDAO;
 import com.example.snapchat.dto.UserDto;
-import com.example.snapchat.database.DatabaseFacade;
-import com.example.snapchat.database.model.User;
-import com.example.Preferences;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button signUpButton;
 
     private WelcomeActivity thisInstance;
-    private DatabaseFacade databaseFacade = null;
+    private UserDAO userDao = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class WelcomeActivity extends AppCompatActivity {
         } else if (password.isEmpty()) {
             Toast.makeText(this, "Missing password", Toast.LENGTH_SHORT).show();
         } else {
-            UserDto userDto = new UserDto("", "", "", email, password);
+            final UserDto userDto = new UserDto("", "", "", email, password);
             Api.getInstance().login(userDto)
                     .enqueue(new Callback<UserDto>() {
                         @Override
@@ -86,12 +86,13 @@ public class WelcomeActivity extends AppCompatActivity {
                                     this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
                                 } else {
                                     preferences.setEmail(email);
-                                    preferences.setPassword(password);
-                                    User user = new User();
-                                    user.setEmail(email);
-                                    user.setPassword(password);
-                                    getHelper().createOrUpdateUser(user);
-                                    startMainActivity(user);
+//                                    preferences.setPassword(password);
+                                    UserDto body = response.body();
+                                    User logged = new User(body.getId(), body.getEmail());
+                                    getUserDAO().saveUser(logged);
+                                    String x = getUserDAO().getUser().getEmail();
+                                    Toast.makeText(thisInstance, "User z pamieci " + x, Toast.LENGTH_LONG).show();
+                                    startMainActivity();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -107,10 +108,10 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    private void signUp(){
-      Intent myIntent = new Intent(WelcomeActivity.this, SignUpActivity.class);
-      WelcomeActivity.this.startActivity(myIntent);
-    };
+    private void signUp() {
+        Intent myIntent = new Intent(WelcomeActivity.this, SignUpActivity.class);
+        WelcomeActivity.this.startActivity(myIntent);
+    }
 
     private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
@@ -118,18 +119,10 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void startMainActivity(User user) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("user", user);
-        startActivity(intent);
-    }
-
-    public DatabaseFacade getHelper() {
-        if (databaseFacade == null) {
-            databaseFacade=new DatabaseFacade(this);
+    private UserDAO getUserDAO() {
+        if (userDao == null) {
+            userDao = new UserDAO(getApplicationContext());
         }
-        return databaseFacade;
+        return userDao;
     }
-
 }
