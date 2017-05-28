@@ -1,4 +1,4 @@
-package com.example.snapchat.dao;
+package com.example.snapchat.storeage;
 
 import android.content.Context;
 

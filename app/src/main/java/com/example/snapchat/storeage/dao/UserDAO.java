@@ -1,15 +1,15 @@
-package com.example.snapchat.dao.repository;
+package com.example.snapchat.storeage.dao;
 
 import android.content.Context;
 
-import com.example.snapchat.dao.model.User;
-import com.example.snapchat.dao.JsonFileStoreage;
+import com.example.snapchat.storeage.model.User;
+import com.example.snapchat.storeage.JsonFileStoreage;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-public class UserRepository {
+public class UserDAO {
 
     private final String FILE_NAME = "user.json";
     private Gson gson;
@@ -22,7 +22,7 @@ public class UserRepository {
         }.getType();
     }
 
-    public UserRepository(Context context) {
+    public UserDAO(Context context) {
         this.storeage = new JsonFileStoreage(context, FILE_NAME);
     }
 

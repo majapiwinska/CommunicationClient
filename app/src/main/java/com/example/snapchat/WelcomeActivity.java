@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
-import com.example.snapchat.dao.model.User;
-import com.example.snapchat.dao.storeage.UserDAO;
+import com.example.snapchat.storeage.model.User;
+import com.example.snapchat.storeage.dao.UserDAO;
 import com.example.snapchat.dto.UserDto;
 
 import retrofit2.Call;

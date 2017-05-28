@@ -1,4 +1,4 @@
-package com.example.snapchat.dao.model;
+package com.example.snapchat.storeage.model;
 
 public class User {
 
