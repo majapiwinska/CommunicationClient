@@ -6,30 +6,49 @@ package com.example.snapchat.dto;
 
 public class FriendDto {
 
-    private String userEmail;
-    private String friendEmail;
+    private Long id;
+
+    private String nick;
+
+    private String email;
 
     public FriendDto() {
     }
 
-    public FriendDto(String userEmail, String friendEmail) {
-        this.userEmail = userEmail;
-        this.friendEmail = friendEmail;
+    public FriendDto(Long id, String nick, String email) {
+        this.id = id;
+        this.nick = nick;
+        this.email = email;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getFriendEmail() {
-        return friendEmail;
+    public String getNick() {
+        return nick;
     }
 
-    public void setFriendEmail(String friendEmail) {
-        this.friendEmail = friendEmail;
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "FriendDto{" +
+                "email='" + email + '\'' +
+                '}';
     }
 }

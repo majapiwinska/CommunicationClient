@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 
 public class Preferences {
 
+    private static final String ID_KEY = "id_key";
     private static final String EMAIL_KEY = "email_key";
     private static final String PASSWORD_KEY = "password_kye";
     private static final String LAST_SYNC_TIME_KEY = "last_sync_time_key";
@@ -55,5 +56,13 @@ public class Preferences {
 
     public String getLastSyncTime(){
         return sharedPreferences.getString(LAST_SYNC_TIME_KEY, null);
+    }
+
+    public void setUserId(Long userId){
+        sharedPreferences.edit().putLong(ID_KEY, userId).apply();
+    }
+
+    public Long getUserId(){
+        return sharedPreferences.getLong(ID_KEY, 0L);
     }
 }

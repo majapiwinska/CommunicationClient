@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,10 +18,7 @@ import android.widget.Toast;
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
-import com.example.snapchat.api.ApiInterface;
 import com.example.snapchat.dto.FriendDto;
-import com.example.snapchat.dto.UserDto;
-import com.example.snapchat.storeage.model.Friend;
 
 import java.util.List;
 
@@ -42,7 +40,8 @@ public class FriendsActivity extends AppCompatActivity {
     private Button btnAddFriend;
     private EditText friendEmail;
     private Button btnDialog;
-    private List<Friend> friends;
+    private List<FriendDto> friends;
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +55,31 @@ public class FriendsActivity extends AppCompatActivity {
         btnAddFriend = (Button) findViewById(R.id.add_friend_button);
         gestureObject = new GestureDetectorCompat(this, new FriendsActivity.LearnGesture());
 
+        Api.getInstance().getFriends(preferences.getUserId())
+                .enqueue(new Callback<List<FriendDto>>() {
+                    @Override
+                    public void onResponse(Call<List<FriendDto>> call, Response<List<FriendDto>> response) {
+                        try {
+                            if (response.code()  < 200 || response.code() >= 300) {
+                                Toast.makeText(thisInstance, "Nie udalo sie wyswietlic uzytkownikow!", Toast.LENGTH_SHORT).show();
+                                this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
+                            } else {
+                                friends = response.body();
+                                adapter = new ArrayAdapter<>(thisInstance, R.layout.friend_text_view, friends);
+                                friendsListView.setAdapter(adapter);
+                                Toast.makeText(thisInstance, "yay,widzisz uzytkownikow!", Toast.LENGTH_SHORT).show();
+                                this.onFailure(call, new Throwable("nie wiem jaki bald"));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<List<FriendDto>> call, Throwable t) {
+                        Log.d(FriendsActivity.class.getSimpleName(), "Error in displaying friends(): " + t.getLocalizedMessage());
+                    }
+                });
+
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -68,12 +92,10 @@ public class FriendsActivity extends AppCompatActivity {
                 btnDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FriendDto friendDto = new FriendDto(preferences.getEmail(),friendEmail.getText().toString());
-
-                        Api.getInstance().addFriend(friendDto)
-                          .enqueue(new Callback<UserDto>() {
+                        Api.getInstance().addFriend(preferences.getUserId(), friendEmail.getText().toString())
+                          .enqueue(new Callback<Void>() {
                             @Override
-                            public void onResponse(Call<UserDto> call, Response<UserDto> response) {
+                            public void onResponse(Call<Void> call, Response<Void> response) {
                                 try {
                                     if (response.code()  < 200 || response.code() >= 300) {
                                         Toast.makeText(thisInstance, "Nie dodano znajomego!", Toast.LENGTH_SHORT).show();
@@ -86,13 +108,11 @@ public class FriendsActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-
                             @Override
-                            public void onFailure(Call<UserDto> call, Throwable t) {
+                            public void onFailure(Call<Void> call, Throwable t) {
                                 Log.d(FriendsActivity.class.getSimpleName(), "Error in adding a friend(): " + t.getLocalizedMessage());
                             }
                         });
-//                        Api.getInstance().getFriends()
                         dialog.dismiss();
                     }
 

@@ -87,6 +87,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                 } else {
                                     preferences.setEmail(email);
                                     UserDto body = response.body();
+                                    preferences.setUserId(body.getId());
                                     LoggedUser logged = new LoggedUser(body.getId(), body.getEmail());
                                     getUserDAO().saveUser(logged);
                                     String x = getUserDAO().getUser().getEmail();

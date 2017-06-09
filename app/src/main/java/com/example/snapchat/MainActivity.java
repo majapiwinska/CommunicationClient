@@ -23,6 +23,7 @@ import com.example.snapchat.dto.SnapDto;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -35,6 +36,8 @@ public class MainActivity extends FragmentActivity {
     private ImageView capturedImage;
     private Preferences preferences;
     private GestureDetectorCompat gestureObject;
+    private EncodeImage encodeImage;
+    private String image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MainActivity extends FragmentActivity {
         btnSendSnap = (Button) findViewById(R.id.btnSendSnap);
        // btnEditSnap = (Button) findViewById(R.id.btnEditSnap);
         capturedImage= (ImageView) findViewById(R.id.capturedImage);
+
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,21 +60,46 @@ public class MainActivity extends FragmentActivity {
         btnSendSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSnap();
-
+                EncodeImage encoder = new EncodeImage(capturedImage);
+                String img = null;
+                try { // nigdy nie pisz takiej obslugi błędów
+                    img = encoder.execute().get();
+                    ImageHolder.setImage(img);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                if(img == null){
+                    Toast.makeText(getApplicationContext(), "encoding failed", Toast.LENGTH_LONG ).show();
+                    return;
+                }
+                selectFriends();
               }
         });
-
         gestureObject = new GestureDetectorCompat(this, new LearnGesture());
-        //openCamera();
     }
 
-    private void sendSnap() {
-        new UploadSnap(capturedImage, preferences.getEmail()).execute();
+    private void selectFriends() {
+        Intent intent = new Intent(MainActivity.this, SelectFriendsToSnapActivity.class);
+        Bundle b = new Bundle();
+//        b.putString("image", image); //Your id
+        intent.putExtras(b); //Put your id to your next Intent
+        startActivity(intent);
+        finish();
+
+     //
     }
 
-
-
+    private String encodeImage(ImageView capturedImage) {
+        capturedImage.buildDrawingCache();
+        Bitmap bitmap = capturedImage.getDrawingCache();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] b = stream.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -98,15 +127,6 @@ public class MainActivity extends FragmentActivity {
         startActivityForResult(intent, 0);
     }
 
-    private String encodeImage(ImageView capturedImage) {
-        capturedImage.buildDrawingCache();
-        Bitmap bitmap = capturedImage.getDrawingCache();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] b = stream.toByteArray();
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-        return encodedImage;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -144,41 +164,28 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    class EncodeImage extends AsyncTask<Void, Void, String>{
 
-    private class UploadSnap extends AsyncTask<Void, Void, Void> {
         private ImageView imageView;
-        private String email;
-        private String response = "fail";
+        private String image;
 
-        public UploadSnap(ImageView imageView, String email) {
+        public EncodeImage(ImageView imageView){
             this.imageView = imageView;
-            this.email = email;
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            String image = encodeImage(imageView);
-            SnapDto dto = new SnapDto(email, image);
-            Call<Void> call = Api.getInstance().sendSnap(dto);
-
-            try{
-                Response<Void> r = call.execute();
-                response = r.message();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-            return null;
+        protected String doInBackground(Void... params) {
+           image =  encodeImage(imageView);
+           return image;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(), "dostalam snapa body: " + response,Toast.LENGTH_LONG ).show();
+        public String getImage() {
+            return image;
+        }
 
-            // Toast.makeText(MainActivity.this, "Koniec async-task" ,Toast.LENGTH_LONG ).show();
+        public void setImage(String image) {
+            this.image = image;
         }
     }
-
-
 
 }

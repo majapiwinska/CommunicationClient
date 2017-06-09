@@ -6,6 +6,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.Button;
 
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
@@ -20,16 +21,18 @@ public class ChatActivity extends AppCompatActivity {
     private ChatActivity thisInstance;
     private GestureDetectorCompat gestureObject;
 
+    private Button refreshChatBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         preferences = Preferences.getInstance(this);
         thisInstance = this;
+        gestureObject = new GestureDetectorCompat(this, new ChatActivity.LearnGesture());
 
         setContentView(R.layout.activity_chat);
-
-        gestureObject = new GestureDetectorCompat(this, new ChatActivity.LearnGesture());
+        refreshChatBtn = (Button) findViewById(R.id.refresh_chat_button);
     }
 
     @Override

@@ -11,6 +11,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 /**
  * Created by maja on 28.04.17.
@@ -39,15 +40,15 @@ public interface ApiInterface {
             @Body List<SnapDto> snaps
     );
 
-    @PUT("addfriend")
-    Call<UserDto> addFriend(
-            @Body FriendDto friendDto
+    @PUT("addfriend/{id}/{friendEmail}")
+    Call<Void> addFriend(
+            @Path("id") Long id,
+            @Path("friendEmail") String friendEmail
     );
 
-    // TODO zapytanie get musi iść na ścieżkę z parametrem usera
-    @GET("getfriends")
-    Call<List<UserDto>> getFriends(
-            @Body List<UserDto> friends
+    @GET("getfriends/{id}")
+    Call<List<FriendDto>> getFriends(
+            @Path("id") Long id
     );
 
 }
