@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
 import com.example.snapchat.api.Api;
+import com.example.snapchat.dto.BasicDto;
 import com.example.snapchat.dto.FriendDto;
 
 import java.util.List;
@@ -92,7 +93,7 @@ public class FriendsActivity extends AppCompatActivity {
                 btnDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Api.getInstance().addFriend(preferences.getUserId(), friendEmail.getText().toString())
+                        Api.getInstance().addFriend(preferences.getUserId(), new BasicDto(friendEmail.getText().toString()))
                           .enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

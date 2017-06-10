@@ -1,5 +1,6 @@
 package com.example.snapchat.api;
 
+import com.example.snapchat.dto.BasicDto;
 import com.example.snapchat.dto.FriendDto;
 import com.example.snapchat.dto.SnapDto;
 import com.example.snapchat.dto.UserDto;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -40,10 +42,10 @@ public interface ApiInterface {
             @Body List<SnapDto> snaps
     );
 
-    @PUT("addfriend/{id}/{friendEmail}")
+    @PUT("addfriend/{id}")
     Call<Void> addFriend(
             @Path("id") Long id,
-            @Path("friendEmail") String friendEmail
+            @Body BasicDto friendEmail
     );
 
     @GET("getfriends/{id}")
