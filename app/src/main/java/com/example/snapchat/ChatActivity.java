@@ -85,6 +85,11 @@ public class ChatActivity extends AppCompatActivity {
                                 this.onFailure(call, new Throwable("Blad HTTP!"));
                             } else {
                                 snaps.addAll(response.body());
+                                if (snaps.isEmpty()) {
+                                    Toast.makeText(thisInstance, "Nie masz nowych snapow. Smuteczek :(", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                Toast.makeText(thisInstance, "Foteczki czekaja, obczajamy? :)", Toast.LENGTH_SHORT).show();
                                 showSnapList();
                             }
                         } catch (Exception e) {
@@ -131,7 +136,7 @@ public class ChatActivity extends AppCompatActivity {
                     public void run() {
                         dialog.dismiss();
                     }
-                }, 5000);
+                }, 3000);
 
                 snaps.remove(position);
                 adapter.notifyDataSetChanged();

@@ -3,8 +3,8 @@ package com.example.snapchat;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Base64;
 import android.view.GestureDetector;
@@ -31,15 +31,15 @@ public class MainActivity extends FragmentActivity {
     private ImageView capturedImage;
     private Preferences preferences;
     private GestureDetectorCompat gestureObject;
-    private EncodeImage encodeImage;
-    private String image;
+    private MainActivity thisInstance;
+    private boolean imageExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         preferences = Preferences.getInstance(this);
-
+        thisInstance = this;
         setContentView(R.layout.activity_main);
         btnCamera = (Button) findViewById(R.id.btnCamera);
         btnSendSnap = (Button) findViewById(R.id.btnSendSnap);
@@ -58,11 +58,16 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 editImage(capturedImage);
-            }});
+            }
+        });
 
         btnSendSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (imageExists == false) {
+                    Toast.makeText(thisInstance, "Halo! Najpierw zrob zdjecie! ;)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 EncodeImage encoder = new EncodeImage(capturedImage);
                 String img = null;
                 try {
@@ -84,16 +89,10 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-
     private void selectFriends() {
         Intent intent = new Intent(MainActivity.this, SelectFriendsToSnapActivity.class);
-        Bundle b = new Bundle();
-//        b.putString("image", image); //Your id
-        intent.putExtras(b); //Put your id to your next Intent
         startActivity(intent);
         finish();
-
-     //
     }
 
     private String encodeImage(ImageView capturedImage) {
@@ -133,7 +132,7 @@ public class MainActivity extends FragmentActivity {
         startActivityForResult(intent, 0);
     }
 
-    private void editImage(ImageView capturedImage){
+    private void editImage(ImageView capturedImage) {
         Intent intent = new Intent(MainActivity.this, EditSnapActivity.class);
         startActivity(intent);
     }
@@ -143,24 +142,27 @@ public class MainActivity extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             Bitmap bp = (Bitmap) data.getExtras().get("data");
             capturedImage.setImageBitmap(bp);
+            imageExists = true;
         }
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
         this.gestureObject.onTouchEvent(event);
         return super.onTouchEvent(event);
-    };
+    }
 
-    class LearnGesture extends GestureDetector.SimpleOnGestureListener{
+    ;
+
+    class LearnGesture extends GestureDetector.SimpleOnGestureListener {
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY){
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-            if(e2.getX() > e1.getX()){
+            if (e2.getX() > e1.getX()) {
 
                 Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 startActivity(intent);
@@ -171,23 +173,25 @@ public class MainActivity extends FragmentActivity {
             }
             return true;
 
-        };
+        }
+
+        ;
 
     }
 
-    class EncodeImage extends AsyncTask<Void, Void, String>{
+    class EncodeImage extends AsyncTask<Void, Void, String> {
 
         private ImageView imageView;
         private String image;
 
-        public EncodeImage(ImageView imageView){
+        public EncodeImage(ImageView imageView) {
             this.imageView = imageView;
         }
 
         @Override
         protected String doInBackground(Void... params) {
-           image =  encodeImage(imageView);
-           return image;
+            image = encodeImage(imageView);
+            return image;
         }
 
         public String getImage() {

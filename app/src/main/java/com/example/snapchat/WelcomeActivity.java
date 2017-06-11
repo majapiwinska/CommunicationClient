@@ -91,7 +91,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                     LoggedUser logged = new LoggedUser(body.getId(), body.getEmail());
                                     getUserDAO().saveUser(logged);
                                     String x = getUserDAO().getUser().getEmail();
-                                    Toast.makeText(thisInstance, "LoggedUser z pamieci " + x, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(thisInstance, "Zalogowany user: " + x, Toast.LENGTH_SHORT).show();
                                     startMainActivity();
                                 }
                             } catch (Exception e) {

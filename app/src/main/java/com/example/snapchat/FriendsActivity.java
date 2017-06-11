@@ -63,13 +63,12 @@ public class FriendsActivity extends AppCompatActivity {
                         try {
                             if (response.code()  < 200 || response.code() >= 300) {
                                 Toast.makeText(thisInstance, "Nie udalo sie wyswietlic uzytkownikow!", Toast.LENGTH_SHORT).show();
-                                this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
+                                this.onFailure(call, new Throwable("HTTP error code"));
                             } else {
                                 friends = response.body();
                                 adapter = new ArrayAdapter<>(thisInstance, R.layout.friend_text_view, friends);
                                 friendsListView.setAdapter(adapter);
-                                Toast.makeText(thisInstance, "yay,widzisz uzytkownikow!", Toast.LENGTH_SHORT).show();
-                                this.onFailure(call, new Throwable("nie wiem jaki bald"));
+                                Toast.makeText(thisInstance, "Oto twoi przyjaciele <3", Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -103,7 +102,6 @@ public class FriendsActivity extends AppCompatActivity {
                                         this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
                                     } else {
                                         Toast.makeText(thisInstance, "Dodano użytkownika!", Toast.LENGTH_SHORT).show();
-                                        this.onFailure(call, new Throwable("nie wiem jaki bald"));
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

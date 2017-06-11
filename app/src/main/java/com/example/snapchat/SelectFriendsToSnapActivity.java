@@ -1,5 +1,6 @@
 package com.example.snapchat;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
 
                             if (response.code() < 200 || response.code() >= 300) {
                                 Toast.makeText(thisInstance, "Nie udalo sie wyswietlic uzytkownikow!", Toast.LENGTH_SHORT).show();
-                                this.onFailure(call, new Throwable("Niepoprawne dane logowania"));
+                                this.onFailure(call, new Throwable("HTTP error code"));
                             } else {
 
                                 for (FriendDto friend : response.body()) {
@@ -79,8 +80,6 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
                                 friendsListView.setAdapter(dataAdapter);
                                 friendsListView.setItemsCanFocus(false);
                                 friendsListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                                Toast.makeText(thisInstance, "yay,widzisz uzytkownikow!", Toast.LENGTH_SHORT).show();
-                                this.onFailure(call, new Throwable("nie wiem jaki bald"));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -98,12 +97,20 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
             public void onClick(View v) {
                 selectedFriends = dataAdapter.getSelectedString();
                 sendSnap(ImageHolder.getImage(), selectedFriends);
+                clearCacheAndGoToMain();
             }
         });
 
     }
 
-    public void sendSnap(String image, List<String> receivers) {
+    private void clearCacheAndGoToMain() {
+        ImageHolder.setImage("");
+        Intent intent = new Intent(SelectFriendsToSnapActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendSnap(String image, List<String> receivers) {
         new UploadSnap(image, preferences.getEmail(), receivers).execute();
     }
 
@@ -111,7 +118,7 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
         private String image;
         private String senderEmail;
         private List<String> receiversEmails;
-        private String response = "fail";
+        private Response<Void> response;
 
         public UploadSnap(String image, String senderEmail, List<String> receiversEmails) {
             this.image = image;
@@ -125,8 +132,7 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
             Call<Void> call = Api.getInstance().sendSnap(dto);
 
             try {
-                Response<Void> r = call.execute();
-                response = r.message();
+                response = call.execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,8 +142,11 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(), "dostalam snapa body: " + response, Toast.LENGTH_LONG).show();
-
+            if (response.code() < 200 || response.code() >= 300) {
+                Toast.makeText(thisInstance, "Ojoj, blad! Nie udalo Ci sie wyslac snapa!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(thisInstance, "Snap juz wyslany, szybciutko co?", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
