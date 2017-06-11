@@ -18,15 +18,10 @@ import android.widget.Toast;
 
 import com.example.Preferences;
 import com.example.maja.snapchat.R;
-import com.example.snapchat.api.Api;
-import com.example.snapchat.dto.SnapDto;
+import com.example.snapchat.utils.ImageHolder;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class MainActivity extends FragmentActivity {
 
@@ -110,6 +105,7 @@ public class MainActivity extends FragmentActivity {
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
         return encodedImage;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -1,4 +1,4 @@
-package com.example.snapchat;
+package com.example.snapchat.utils;
 
 /**
  * Created by maja on 02.06.17.

@@ -1,29 +1,16 @@
 package com.example.snapchat;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Preferences;
@@ -32,10 +19,7 @@ import com.example.snapchat.adapter.CheckboxAdapter;
 import com.example.snapchat.api.Api;
 import com.example.snapchat.dto.FriendDto;
 import com.example.snapchat.dto.SnapDto;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.snapchat.utils.ImageHolder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,8 +29,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.country;
 
 /**
  * Created by maja on 01.06.17.
@@ -123,16 +105,6 @@ public class SelectFriendsToSnapActivity extends FragmentActivity {
 
     public void sendSnap(String image, List<String> receivers) {
         new UploadSnap(image, preferences.getEmail(), receivers).execute();
-    }
-
-    private String encodeImage(ImageView capturedImage) {
-        capturedImage.buildDrawingCache();
-        Bitmap bitmap = capturedImage.getDrawingCache();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] b = stream.toByteArray();
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-        return encodedImage;
     }
 
     private class UploadSnap extends AsyncTask<Void, Void, Void> {

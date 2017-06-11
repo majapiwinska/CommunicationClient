@@ -7,14 +7,14 @@ package com.example.snapchat.dto;
 public class GetSnapDto {
 
     private String senderEmail;
-    private String image;
+    private String photo;
 
     public GetSnapDto() {
     }
 
-    public GetSnapDto(String senderEmail, String image) {
+    public GetSnapDto(String senderEmail, String photo) {
         this.senderEmail = senderEmail;
-        this.image = image;
+        this.photo = photo;
     }
 
     public String getSenderEmail() {
@@ -25,11 +25,16 @@ public class GetSnapDto {
         this.senderEmail = senderEmail;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    @Override
+    public String toString() {
+        return "Snap from " + senderEmail;
     }
 }
