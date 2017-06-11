@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -124,6 +125,13 @@ public class ChatActivity extends AppCompatActivity {
                 ImageView imageView = (ImageView) dialog.findViewById(R.id.show_snap_image_view);
                 imageView.setImageBitmap(bitmap);
                 dialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                }, 5000);
 
                 snaps.remove(position);
                 adapter.notifyDataSetChanged();
