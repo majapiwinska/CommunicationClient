@@ -48,8 +48,9 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         btnCamera = (Button) findViewById(R.id.btnCamera);
         btnSendSnap = (Button) findViewById(R.id.btnSendSnap);
-       // btnEditSnap = (Button) findViewById(R.id.btnEditSnap);
-        capturedImage= (ImageView) findViewById(R.id.capturedImage);
+        btnEditSnap = (Button) findViewById(R.id.btnEditSnap);
+        capturedImage = (ImageView) findViewById(R.id.capturedImage);
+        gestureObject = new GestureDetectorCompat(this, new LearnGesture());
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,12 +58,19 @@ public class MainActivity extends FragmentActivity {
                 openCamera();
             }
         });
+
+        btnEditSnap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editImage(capturedImage);
+            }});
+
         btnSendSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EncodeImage encoder = new EncodeImage(capturedImage);
                 String img = null;
-                try { // nigdy nie pisz takiej obslugi błędów
+                try {
                     img = encoder.execute().get();
                     ImageHolder.setImage(img);
                 } catch (InterruptedException e) {
@@ -70,15 +78,17 @@ public class MainActivity extends FragmentActivity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-                if(img == null){
-                    Toast.makeText(getApplicationContext(), "encoding failed", Toast.LENGTH_LONG ).show();
+                if (img == null) {
+                    Toast.makeText(getApplicationContext(), "encoding failed", Toast.LENGTH_LONG).show();
                     return;
                 }
                 selectFriends();
-              }
+            }
         });
-        gestureObject = new GestureDetectorCompat(this, new LearnGesture());
+
+
     }
+
 
     private void selectFriends() {
         Intent intent = new Intent(MainActivity.this, SelectFriendsToSnapActivity.class);
@@ -125,6 +135,11 @@ public class MainActivity extends FragmentActivity {
     private void openCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, 0);
+    }
+
+    private void editImage(ImageView capturedImage){
+        Intent intent = new Intent(MainActivity.this, EditSnapActivity.class);
+        startActivity(intent);
     }
 
 

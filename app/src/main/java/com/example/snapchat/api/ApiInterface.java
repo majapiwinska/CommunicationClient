@@ -2,6 +2,7 @@ package com.example.snapchat.api;
 
 import com.example.snapchat.dto.BasicDto;
 import com.example.snapchat.dto.FriendDto;
+import com.example.snapchat.dto.GetSnapDto;
 import com.example.snapchat.dto.SnapDto;
 import com.example.snapchat.dto.UserDto;
 
@@ -36,10 +37,9 @@ public interface ApiInterface {
             @Body SnapDto snapDto
     );
 
-    // TODO zapytanie get musi iść na ścieżkę z parametrem usera
-    @GET("getsnaps")
-    Call<List<SnapDto>> getSnaps(
-            @Body List<SnapDto> snaps
+    @GET("getsnaps/{id}")
+    Call<List<GetSnapDto>> getSnaps(
+           @Path("id") Long id
     );
 
     @PUT("addfriend/{id}")
